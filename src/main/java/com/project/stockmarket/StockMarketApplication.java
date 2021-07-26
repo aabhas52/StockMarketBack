@@ -1,5 +1,6 @@
 package com.project.stockmarket;
 
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,7 +53,7 @@ public class StockMarketApplication implements CommandLineRunner {
 		exchangeRepository.save(new StockExchangeEntity("BSE", "Bombay Stock Exchange", "", "Mumbai", ""));
 		sectorRepository.save(sector);
 		companyRepository.save(company);
-//		logger.info("Companies in sector -> {}", sector.toString());
+		logger.info("Companies in sector -> {}", sector.getCompanies());
 	}
 
 }

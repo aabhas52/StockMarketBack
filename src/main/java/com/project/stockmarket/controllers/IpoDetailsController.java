@@ -71,7 +71,8 @@ public class IpoDetailsController {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("y-M-d");
 		LocalDate date = LocalDate.parse(rawDate, formatter);
 		LocalTime time = LocalTime.parse(rawTime);
-		List<CompanyAndStockExchanges> mappingList = mappingRepository.findByCompanyCodeAndExchange(companyCode, exchangeCode);
+		List<CompanyAndStockExchanges> mappingList = mappingRepository.findByCompanyCodeAndExchange(companyCode,
+				exchangeCode);
 		CompanyAndStockExchanges mapping = mappingList.get(0);
 		CompanyEntity company = mapping.getCompanyEntity();
 		StockExchangeEntity exchange = mapping.getStockExchangeEntity();
@@ -96,7 +97,6 @@ public class IpoDetailsController {
 	@CrossOrigin(origins = "http://localhost:3000")
 	@PostMapping("/editIpo")
 	public void editIpo(@RequestBody Map<String, Object> ipoDetails) {
-		long ipoId = ((Number) ipoDetails.get("id")).longValue();
 		String companyName = (String) ipoDetails.get("company_name");
 		String exchangeCode = (String) ipoDetails.get("stock_exchange_code");
 		double price = ((Number) ipoDetails.get("price")).doubleValue();
@@ -109,20 +109,17 @@ public class IpoDetailsController {
 		LocalTime time = LocalTime.parse(rawTime);
 		CompanyEntity company = companyRepository.findByCompanyName(companyName);
 		Optional<StockExchangeEntity> exchange = exchangeRepository.findById(exchangeCode);
-		IpoDetailEntity ipo = repository.findById(ipoId);
-		ipo.setCompany(company);
-		ipo.setNumberOfShares(shares);
-		ipo.setOpeningDate(date);
-		ipo.setOpeningTime(time);
-		ipo.setPricePerShare(price);
-		ipo.setRemarks(remarks);
-		ipo.setStockExchange(exchange.get());
-		repository.save(ipo);
+		Optional<IpoDetailEntity> ipo = repository.findByCompanyAndStockExchange(company, exchange.get());
+		if (ipo.isPresent()) {
+			repository.delete(ipo.get());
+		}
+		IpoDetailEntity newIpo = new IpoDetailEntity(company, exchange.get(), price, shares, date, time, remarks);
+		repository.save(newIpo);
 	}
-	
+
 	@CrossOrigin("http://localhost:3000")
 	@GetMapping("/allIPOs")
-	public List<IpoDetailEntity> allIpo(){
-		return repository.findAll();
+	public List<IpoDetailEntity> allIpo() {
+		return repository.findAllByOrderByOpeningDateDesc();
 	}
 }

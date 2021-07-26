@@ -30,7 +30,7 @@ public class User {
 	
 	private String role;
 	
-	protected User() {}
+	public User() {}
 
 	public User(String username, String password, String email, String mobile, boolean confirmed, String role) {
 		this.username = username;

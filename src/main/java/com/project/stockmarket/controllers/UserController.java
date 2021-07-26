@@ -59,6 +59,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.CrossOrigin;
 
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 public class  UserController {
 	
@@ -91,7 +92,7 @@ public class  UserController {
 
 
 		final String username = "aabhasasawa52@gmail.com";
-		final String password = "Dec@2021";
+		final String password = "";
 
 		Properties prop = new Properties();
 		prop.put("mail.smtp.host", "smtp.gmail.com");
