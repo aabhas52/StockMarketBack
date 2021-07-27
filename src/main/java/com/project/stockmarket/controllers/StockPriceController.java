@@ -36,7 +36,7 @@ public class StockPriceController {
 	@Autowired
 	private CompanyStockExchangesRepository mappingRepository;
 
-	@CrossOrigin(origins = "http://localhost:3000")
+	@CrossOrigin(origins = "https://stock-market-front.herokuapp.com")
 	@PostMapping("/addStockPriceByCode")
 	public ResponseEntity<Map<String, String>> addStockPriceByCode(@RequestBody List<Map<String, Object>> stockPrices) {
 		Map<String, String> response = new HashMap<String, String>();
@@ -77,7 +77,7 @@ public class StockPriceController {
 		return new ResponseEntity<Map<String, String>>(response, HttpStatus.OK);
 	}
 
-	@CrossOrigin(origins = "http://localhost:3000")
+	@CrossOrigin(origins = "https://stock-market-front.herokuapp.com")
 	@PostMapping("/findPricesBetweenDates")
 	public ResponseEntity<Map<LocalDate, Double>> findPricesBetweenDates(@RequestBody Map<String, Object> body) {
 		String companyName = (String) body.get("company_name");

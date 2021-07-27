@@ -34,7 +34,7 @@ public class CompanyController {
 	@Autowired
 	private StockPriceRepository priceRepository;
 
-	@CrossOrigin(origins = "http://localhost:3000")
+	@CrossOrigin(origins = "https://stock-market-front.herokuapp.com")
 	@PostMapping("/addCompany")
 	public ResponseEntity<String> addCompany(@RequestBody Map<String, Object> companyDetails) {
 		String companyName = (String) companyDetails.get("company_name");
@@ -54,21 +54,21 @@ public class CompanyController {
 		}
 	}
 
-	@CrossOrigin(origins = "http://localhost:3000")
+	@CrossOrigin(origins = "https://stock-market-front.herokuapp.com")
 	@PostMapping("/editCompany")
 	public ResponseEntity<String> editCompany(@RequestBody CompanyEntity company) {
 		repository.save(company);
 		return new ResponseEntity<String>("Company Edited", HttpStatus.OK);
 	}
 
-	@CrossOrigin(origins = "http://localhost:3000")
+	@CrossOrigin(origins = "https://stock-market-front.herokuapp.com")
 	@GetMapping("/allCompanies")
 	public ResponseEntity<List<CompanyEntity>> allCompanies() {
 		List<CompanyEntity> companies = repository.findAll();
 		return new ResponseEntity<List<CompanyEntity>>(companies, HttpStatus.OK);
 	}
 
-	@CrossOrigin(origins = "http://localhost:3000")
+	@CrossOrigin(origins = "https://stock-market-front.herokuapp.com")
 	@GetMapping("/allCompanies/{sector}")
 	public ResponseEntity<List<CompanyEntity>> allCompaniesBySector(@PathVariable("sector") String sectorName) {
 		Optional<Sector> sector = sectorRepository.findBySectorName(sectorName);
@@ -76,7 +76,7 @@ public class CompanyController {
 		return new ResponseEntity<List<CompanyEntity>>(companies, HttpStatus.OK);
 	}
 
-	@CrossOrigin(origins = "http://localhost:3000")
+	@CrossOrigin(origins = "https://stock-market-front.herokuapp.com")
 	@GetMapping("findCompany/{name}")
 	public ResponseEntity<Map<String, Object>> findCompany(@PathVariable("name") String companyName) {
 		CompanyEntity company = repository.findByCompanyName(companyName);

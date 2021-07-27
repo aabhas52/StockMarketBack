@@ -34,14 +34,14 @@ public class IpoDetailsController {
 	@Autowired
 	private StockExchangeRepository exchangeRepository;
 
-	@CrossOrigin(origins = "http://localhost:3000")
+	@CrossOrigin(origins = "https://stock-market-front.herokuapp.com")
 	@GetMapping("/companyIpo/{name}")
 	public List<IpoDetailEntity> listByCompany(@PathVariable("name") String companyName) {
 		CompanyEntity company = companyRepository.findByCompanyName(companyName);
 		return repository.findByCompanyOrderByOpeningDateDesc(company);
 	}
 
-	@CrossOrigin(origins = "http://localhost:3000")
+	@CrossOrigin(origins = "https://stock-market-front.herokuapp.com")
 	@PostMapping("/editIpo")
 	public void editIpo(@RequestBody Map<String, Object> ipoDetails) {
 		String companyName = (String) ipoDetails.get("company_name");
@@ -64,7 +64,7 @@ public class IpoDetailsController {
 		repository.save(newIpo);
 	}
 
-	@CrossOrigin("http://localhost:3000")
+	@CrossOrigin("https://stock-market-front.herokuapp.com")
 	@GetMapping("/allIPOs")
 	public List<IpoDetailEntity> allIpo() {
 		return repository.findAllByOrderByOpeningDateDesc();

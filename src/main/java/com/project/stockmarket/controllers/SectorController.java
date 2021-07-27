@@ -37,13 +37,13 @@ public class SectorController {
 	@Autowired
 	StockPriceRepository priceRepository;
 	
-	@CrossOrigin(origins = "http://localhost:3000")
+	@CrossOrigin(origins = "https://stock-market-front.herokuapp.com")
 	@GetMapping("/allSectors")
 	public List<Sector> getAllSectors(){
 		return repository.findAll();
 	}
 	
-	@CrossOrigin(origins = "http://localhost:3000")
+	@CrossOrigin(origins = "https://stock-market-front.herokuapp.com")
 	@PostMapping("/sectorPrices")
 	public ResponseEntity<Map<LocalDate, Double>> findSectorPrices(@RequestBody Map<String, Object> body){
 		String sectorName = (String) body.get("sector");
