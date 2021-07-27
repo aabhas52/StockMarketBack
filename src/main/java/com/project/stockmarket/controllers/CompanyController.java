@@ -86,10 +86,4 @@ public class CompanyController {
 		response.put("price", latestPrice);
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
 	}
-
-	@CrossOrigin(origins = "http://localhost:3000")
-	@GetMapping("findMatchingCompanies/{text}")
-	public List<CompanyEntity> findMatchingCompanies(@PathVariable String text) {
-		return repository.findByCompanyNameContaining(text);
-	}
 }

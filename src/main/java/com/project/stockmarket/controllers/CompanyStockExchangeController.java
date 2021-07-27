@@ -36,18 +36,6 @@ public class CompanyStockExchangeController {
 	}
 	
 	@CrossOrigin(origins = "http://localhost:3000")
-	@GetMapping("/exchangesToCompanyById/{id}")
-	public List<StockExchangeEntity> findStockExchangesForCompanyById(@PathVariable("id") Long id){
-		return repository.findStockExchangesForCompanyById(id);
-	}
-	
-	@CrossOrigin(origins = "http://localhost:3000")
-	@GetMapping("/companiesInExchange/{stockExchangeCode}")
-	public List<CompanyEntity> findCompaniesInStockExchange(@PathVariable String stockExchangeCode){
-		return repository.findCompaniesForExchange(stockExchangeCode);
-	}
-	
-	@CrossOrigin(origins = "http://localhost:3000")
 	@GetMapping("/deactivateCompany/{companyName}")
 	public void deactivateCompany(@PathVariable("companyName") String companyName) {
 		repository.deactivateCompany(companyName);

@@ -15,12 +15,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.project.stockmarket.entities.CompanyAndStockExchanges;
 import com.project.stockmarket.entities.CompanyEntity;
 import com.project.stockmarket.entities.IpoDetailEntity;
 import com.project.stockmarket.entities.StockExchangeEntity;
 import com.project.stockmarket.repositories.CompanyRepository;
-import com.project.stockmarket.repositories.CompanyStockExchangesRepository;
 import com.project.stockmarket.repositories.IpoDetailRepository;
 import com.project.stockmarket.repositories.StockExchangeRepository;
 
@@ -35,57 +33,6 @@ public class IpoDetailsController {
 
 	@Autowired
 	private StockExchangeRepository exchangeRepository;
-
-	@Autowired
-	private CompanyStockExchangesRepository mappingRepository;
-
-	@CrossOrigin(origins = "http://localhost:3000")
-	@PostMapping("/addIpo")
-	public void addIpo(@RequestBody Map<String, Object> ipoDetails) {
-		String companyName = (String) ipoDetails.get("company_name");
-		String exchangeCode = (String) ipoDetails.get("stock_exchange_code");
-		double price = ((Number) ipoDetails.get("price")).doubleValue();
-		String remarks = (String) ipoDetails.get("remarks");
-		long shares = ((Number) ipoDetails.get("shares")).longValue();
-		String rawDate = (String) ipoDetails.get("date");
-		String rawTime = (String) ipoDetails.get("time");
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("y-M-d");
-		LocalDate date = LocalDate.parse(rawDate, formatter);
-		LocalTime time = LocalTime.parse(rawTime);
-		CompanyEntity company = companyRepository.findByCompanyName(companyName);
-		Optional<StockExchangeEntity> exchange = exchangeRepository.findById(exchangeCode);
-		IpoDetailEntity ipo = new IpoDetailEntity(company, exchange.get(), price, shares, date, time, remarks);
-		repository.save(ipo);
-	}
-
-	@CrossOrigin(origins = "http://localhost:3000")
-	@PostMapping("/addIpoByCode")
-	public void addIpoByCode(@RequestBody Map<String, Object> ipoDetails) {
-		String companyCode = (String) ipoDetails.get("company_code");
-		String exchangeCode = (String) ipoDetails.get("stock_exchange_code");
-		double price = ((Number) ipoDetails.get("price")).doubleValue();
-		String remarks = (String) ipoDetails.get("remarks");
-		long shares = ((Number) ipoDetails.get("shares")).longValue();
-		String rawDate = (String) ipoDetails.get("date");
-		String rawTime = (String) ipoDetails.get("time");
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("y-M-d");
-		LocalDate date = LocalDate.parse(rawDate, formatter);
-		LocalTime time = LocalTime.parse(rawTime);
-		List<CompanyAndStockExchanges> mappingList = mappingRepository.findByCompanyCodeAndExchange(companyCode,
-				exchangeCode);
-		CompanyAndStockExchanges mapping = mappingList.get(0);
-		CompanyEntity company = mapping.getCompanyEntity();
-		StockExchangeEntity exchange = mapping.getStockExchangeEntity();
-		IpoDetailEntity ipo = new IpoDetailEntity(company, exchange, price, shares, date, time, remarks);
-		repository.save(ipo);
-	}
-
-	@CrossOrigin(origins = "http://localhost:3000")
-	@GetMapping("/companyIpoById/{id}")
-	public List<IpoDetailEntity> listByCompanyId(@PathVariable("id") long companyId) {
-		CompanyEntity company = companyRepository.findById(companyId);
-		return repository.findByCompanyOrderByOpeningDateDesc(company);
-	}
 
 	@CrossOrigin(origins = "http://localhost:3000")
 	@GetMapping("/companyIpo/{name}")

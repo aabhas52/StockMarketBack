@@ -3,9 +3,7 @@ package com.project.stockmarket.repositories;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Optional;
-import java.util.Set;
 
 import javax.persistence.EntityManager;
 
@@ -55,28 +53,6 @@ public class CompanyStockExchangesRepository {
 		return exchangeList;
 	}
 	
-	public List<StockExchangeEntity> findStockExchangesForCompanyById(long companyId) {
-		List<CompanyAndStockExchanges> mapList = em.createNativeQuery(
-				"SELECT * FROM COMPANY_AND_STOCK_EXCHANGES WHERE COMPANY_ID = :id AND ACTIVE = TRUE",
-				CompanyAndStockExchanges.class).setParameter("id", companyId).getResultList();
-		List<StockExchangeEntity> exchangeList = new ArrayList<StockExchangeEntity>();
-		mapList.forEach((mapping) -> {
-			exchangeList.add(mapping.getStockExchangeEntity());
-		});
-		return exchangeList;
-	}
-	
-	public List<CompanyEntity> findCompaniesForExchange(String exchangeCode){
-		List<CompanyAndStockExchanges> mapList = em.createNativeQuery(
-				"SELECT * FROM COMPANY_AND_STOCK_EXCHANGES WHERE STOCK_EXCHANGE_CODE = :exchangeCode AND ACTIVE = TRUE",
-				CompanyAndStockExchanges.class).setParameter("exchangeCode", exchangeCode).getResultList();
-		List<CompanyEntity> companyList = new ArrayList<CompanyEntity>();
-		mapList.forEach((mapping) -> {
-			companyList.add(mapping.getCompanyEntity());
-		});
-		return companyList;
-	}
-	
 	public List<CompanyAndStockExchanges> findByCompanyCode(String companyCode) {
 		List<CompanyAndStockExchanges> result = em.createNativeQuery(
 				"SELECT * FROM COMPANY_AND_STOCK_EXCHANGES WHERE COMPANY_CODE = :companyCode AND ACTIVE = TRUE",
@@ -103,6 +79,6 @@ public class CompanyStockExchangesRepository {
 	public void deactivateCompany(String companyName) {
 		CompanyEntity company = companyRepository.findByCompanyName(companyName);
 		em.createNativeQuery("UPDATE COMPANY_AND_STOCK_EXCHANGES SET ACTIVE = FALSE WHERE COMPANY_ID = :id")
-			.setParameter("id", company.getId());
+			.setParameter("id", company.getId()).executeUpdate();
 	}
 }

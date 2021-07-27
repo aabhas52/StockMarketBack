@@ -1,63 +1,32 @@
 package com.project.stockmarket.controllers;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.net.Authenticator;
-import java.net.PasswordAuthentication;
-import java.net.URI;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Properties;
 
 import javax.mail.Message;
 import javax.mail.MessagingException;
-import javax.mail.Multipart;
 import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMessage;
-import javax.mail.internet.MimeMultipart;
 
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
-import java.util.Properties;
-
-import org.apache.tomcat.jni.Buffer;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.stockmarket.entities.User;
 import com.project.stockmarket.repositories.UserRepository;
-
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.CrossOrigin;
 
 @CrossOrigin(origins = "http://localhost:3000")
 @RestController
@@ -65,6 +34,9 @@ public class  UserController {
 	
 	@Autowired
 	UserRepository userrepo;
+	
+	@Autowired
+	private PasswordEncoder bcryptEncoder;
 	
 	@CrossOrigin(origins ="http://localhost:3000")
 	@RequestMapping(value = "/setuserapi",method=RequestMethod.POST)
@@ -92,7 +64,7 @@ public class  UserController {
 
 
 		final String username = "aabhasasawa52@gmail.com";
-		final String password = "";
+		final String password = "Dec@2021";
 
 		Properties prop = new Properties();
 		prop.put("mail.smtp.host", "smtp.gmail.com");
@@ -147,8 +119,14 @@ public class  UserController {
 
 	@CrossOrigin(origins = "http://localhost:3000")
 	@PostMapping("/editUser")
-	public void editUser(@RequestBody User user) {
-		userrepo.save(user);
+	public void editUser(@RequestBody Map<String, String> body) {
+		long id = Long.parseLong((String)body.get("id"));
+		User user = userrepo.findById(id);
+		String username = (String)body.get("username");
+		String password = bcryptEncoder.encode((String)body.get("password"));
+		User newUser = new User(username, password, user.getEmail(), user.getMobile(), true, user.getRole());
+		userrepo.delete(user);
+		userrepo.save(newUser);
 	}
 	
 	@CrossOrigin(origins = "http://localhost:3000")
