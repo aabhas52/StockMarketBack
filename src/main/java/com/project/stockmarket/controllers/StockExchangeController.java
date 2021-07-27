@@ -13,18 +13,18 @@ import com.project.stockmarket.entities.StockExchangeEntity;
 import com.project.stockmarket.repositories.StockExchangeRepository;
 
 @RestController
+@CrossOrigin(origins = "https://stock-market-front.herokuapp.com")
+//@CrossOrigin(origins = "http://localhost:3000")
 public class StockExchangeController {
 
 	@Autowired
 	private StockExchangeRepository repository;
 	
-	@CrossOrigin(origins = "https://stock-market-front.herokuapp.com")
 	@PostMapping("/addStockExchange")
 	public void addStockExchange(@RequestBody StockExchangeEntity stockExchange) {
 		repository.save(stockExchange);
 	}
 	
-	@CrossOrigin(origins = "https://stock-market-front.herokuapp.com")
 	@GetMapping("/allStockExchanges")
 	public List<StockExchangeEntity> listAllExchanges(){
 		return repository.findAll();

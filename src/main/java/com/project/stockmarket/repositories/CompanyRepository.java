@@ -14,4 +14,6 @@ public interface CompanyRepository extends JpaRepository<CompanyEntity, Long>{
 	public CompanyEntity findByCompanyName(String companyName);
 	
 	public List<CompanyEntity> findAllBySector(Sector sector);
+	
+	public List<CompanyEntity> findByCompanyNameContainingIgnoreCase(String text);
 }

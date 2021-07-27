@@ -38,7 +38,6 @@ public class  UserController {
 	@Autowired
 	private PasswordEncoder bcryptEncoder;
 	
-	@CrossOrigin(origins ="https://stock-market-front.herokuapp.com")
 	@RequestMapping(value = "/setuserapi",method=RequestMethod.POST)
 	
 	public String Stringreactuserapi(@RequestBody User user) throws AddressException, MessagingException {	
@@ -117,7 +116,6 @@ public class  UserController {
 		return "User confirmed " +usr.getUsername();
 	}
 
-	@CrossOrigin(origins = "https://stock-market-front.herokuapp.com")
 	@PostMapping("/editUser")
 	public void editUser(@RequestBody Map<String, String> body) {
 		long id = Long.parseLong((String)body.get("id"));
@@ -129,7 +127,6 @@ public class  UserController {
 		userrepo.save(newUser);
 	}
 	
-	@CrossOrigin(origins = "https://stock-market-front.herokuapp.com")
 	@PostMapping("/loginUser")
 	public ResponseEntity<String> login(@RequestBody User user){
 		String username = user.getUsername();

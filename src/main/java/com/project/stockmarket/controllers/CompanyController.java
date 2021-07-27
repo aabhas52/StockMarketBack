@@ -23,6 +23,8 @@ import com.project.stockmarket.repositories.SectorRepository;
 import com.project.stockmarket.repositories.StockPriceRepository;
 
 @RestController
+@CrossOrigin(origins = "https://stock-market-front.herokuapp.com")
+//@CrossOrigin(origins = "http://localhost:3000")
 public class CompanyController {
 
 	@Autowired
@@ -34,7 +36,6 @@ public class CompanyController {
 	@Autowired
 	private StockPriceRepository priceRepository;
 
-	@CrossOrigin(origins = "https://stock-market-front.herokuapp.com")
 	@PostMapping("/addCompany")
 	public ResponseEntity<String> addCompany(@RequestBody Map<String, Object> companyDetails) {
 		String companyName = (String) companyDetails.get("company_name");
@@ -54,21 +55,18 @@ public class CompanyController {
 		}
 	}
 
-	@CrossOrigin(origins = "https://stock-market-front.herokuapp.com")
 	@PostMapping("/editCompany")
 	public ResponseEntity<String> editCompany(@RequestBody CompanyEntity company) {
 		repository.save(company);
 		return new ResponseEntity<String>("Company Edited", HttpStatus.OK);
 	}
 
-	@CrossOrigin(origins = "https://stock-market-front.herokuapp.com")
 	@GetMapping("/allCompanies")
 	public ResponseEntity<List<CompanyEntity>> allCompanies() {
 		List<CompanyEntity> companies = repository.findAll();
 		return new ResponseEntity<List<CompanyEntity>>(companies, HttpStatus.OK);
 	}
 
-	@CrossOrigin(origins = "https://stock-market-front.herokuapp.com")
 	@GetMapping("/allCompanies/{sector}")
 	public ResponseEntity<List<CompanyEntity>> allCompaniesBySector(@PathVariable("sector") String sectorName) {
 		Optional<Sector> sector = sectorRepository.findBySectorName(sectorName);
@@ -76,8 +74,7 @@ public class CompanyController {
 		return new ResponseEntity<List<CompanyEntity>>(companies, HttpStatus.OK);
 	}
 
-	@CrossOrigin(origins = "https://stock-market-front.herokuapp.com")
-	@GetMapping("findCompany/{name}")
+	@GetMapping("/findCompany/{name}")
 	public ResponseEntity<Map<String, Object>> findCompany(@PathVariable("name") String companyName) {
 		CompanyEntity company = repository.findByCompanyName(companyName);
 		StockPriceEntity latestPrice = priceRepository.findTop1ByCompanyOrderByDateDesc(company);
@@ -85,5 +82,11 @@ public class CompanyController {
 		response.put("company", company);
 		response.put("price", latestPrice);
 		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
+	}
+	
+	
+	@GetMapping("/findMatchingCompany/{text}")
+	public ResponseEntity<List<CompanyEntity>> findMatchingCompany(@PathVariable("text") String text){
+		return new ResponseEntity<List<CompanyEntity>>(repository.findByCompanyNameContainingIgnoreCase(text), HttpStatus.OK);
 	}
 }
