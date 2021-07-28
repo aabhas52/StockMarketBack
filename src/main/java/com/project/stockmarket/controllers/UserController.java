@@ -28,6 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.project.stockmarket.entities.User;
 import com.project.stockmarket.repositories.UserRepository;
 
+//@CrossOrigin(origins = "http://localhost:3000")
 @CrossOrigin(origins = "https://stock-market-front.herokuapp.com")
 @RestController
 public class  UserController {

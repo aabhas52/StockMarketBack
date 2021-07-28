@@ -16,6 +16,7 @@ import com.project.stockmarket.repositories.CompanyStockExchangesRepository;
 
 @RestController
 @CrossOrigin(origins = "https://stock-market-front.herokuapp.com")
+//@CrossOrigin(origins = "http://localhost:3000")
 public class CompanyStockExchangeController {
 
 	@Autowired
