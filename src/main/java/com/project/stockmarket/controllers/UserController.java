@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,9 +36,6 @@ public class  UserController {
 	
 	@Autowired
 	UserRepository userrepo;
-	
-	@Autowired
-	private PasswordEncoder bcryptEncoder;
 	
 	@RequestMapping(value = "/setuserapi",method=RequestMethod.POST)
 	
@@ -63,8 +61,8 @@ public class  UserController {
 
 
 
-		final String username = "aabhasasawa52@gmail.com";
-		final String password = "Dec@2021";
+		final String username = "tempconfirmmail@gmail.com";
+		final String password = "tempconfirmmail123";
 
 		Properties prop = new Properties();
 		prop.put("mail.smtp.host", "smtp.gmail.com");
@@ -119,6 +117,7 @@ public class  UserController {
 
 	@PostMapping("/editUser")
 	public void editUser(@RequestBody Map<String, String> body) {
+		PasswordEncoder bcryptEncoder = new BCryptPasswordEncoder();
 		long id = Long.parseLong((String)body.get("id"));
 		User user = userrepo.findById(id);
 		String username = (String)body.get("username");
