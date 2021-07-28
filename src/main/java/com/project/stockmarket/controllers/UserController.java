@@ -95,7 +95,7 @@ public class  UserController {
 			//     message.setText("Dear Mail Crawler,"
 			//           + "\n\n Please do not spam my email!");
 			message.setContent(
-					"<h1><a href =\"https://stock-market-front.herokuapp.com/confirmuser/"+userid+"/\"> Click to confirm </a></h1>",
+					"<h1><a href =\"https://stock-market-back.herokuapp.com/confirmuser/"+userid+"/\"> Click to confirm </a></h1>",
 					"text/html");
 			Transport.send(message);
 
