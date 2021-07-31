@@ -1,6 +1,5 @@
 package com.project.stockmarket.controllers;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -17,10 +16,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.project.stockmarket.entities.CompanyEntity;
 import com.project.stockmarket.entities.Sector;
-import com.project.stockmarket.entities.StockPriceEntity;
 import com.project.stockmarket.repositories.CompanyRepository;
 import com.project.stockmarket.repositories.SectorRepository;
-import com.project.stockmarket.repositories.StockPriceRepository;
 
 @RestController
 @CrossOrigin(origins = "https://stock-market-front.herokuapp.com")
@@ -32,9 +29,6 @@ public class CompanyController {
 
 	@Autowired
 	private SectorRepository sectorRepository;
-
-	@Autowired
-	private StockPriceRepository priceRepository;
 
 	@PostMapping("/addCompany")
 	public ResponseEntity<String> addCompany(@RequestBody Map<String, Object> companyDetails) {
@@ -73,17 +67,6 @@ public class CompanyController {
 		List<CompanyEntity> companies = repository.findAllBySector(sector.get());
 		return new ResponseEntity<List<CompanyEntity>>(companies, HttpStatus.OK);
 	}
-
-	@GetMapping("/findCompany/{name}")
-	public ResponseEntity<Map<String, Object>> findCompany(@PathVariable("name") String companyName) {
-		CompanyEntity company = repository.findByCompanyName(companyName);
-		StockPriceEntity latestPrice = priceRepository.findTop1ByCompanyOrderByDateDesc(company);
-		Map<String, Object> response = new HashMap<String, Object>();
-		response.put("company", company);
-		response.put("price", latestPrice);
-		return new ResponseEntity<Map<String, Object>>(response, HttpStatus.OK);
-	}
-	
 	
 	@GetMapping("/findMatchingCompany/{text}")
 	public ResponseEntity<List<CompanyEntity>> findMatchingCompany(@PathVariable("text") String text){

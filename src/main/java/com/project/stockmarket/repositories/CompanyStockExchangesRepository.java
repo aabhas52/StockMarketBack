@@ -81,4 +81,8 @@ public class CompanyStockExchangesRepository {
 		em.createNativeQuery("UPDATE COMPANY_AND_STOCK_EXCHANGES SET ACTIVE = FALSE WHERE COMPANY_ID = :id")
 			.setParameter("id", company.getId()).executeUpdate();
 	}
+	
+	public void deleteAll() {
+		em.createNativeQuery("DELETE FROM COMPANY_AND_STOCK_EXCHANGES").executeUpdate();
+	}
 }
